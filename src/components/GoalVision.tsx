@@ -13,14 +13,13 @@ export function GoalVision() {
   return (
     <section className="surface-card overflow-hidden p-0">
       <div className="grid lg:grid-cols-5">
-        {/* Image collage */}
-        <div className="relative lg:col-span-3">
+        {/* Full vision image — never cropped */}
+        <div className="relative bg-background lg:col-span-3">
           <img
             src={vision}
             alt="Dream home with Hanuman ji, TCS, bike and Jai Shree Ram"
-            className="h-64 w-full object-cover lg:h-full"
+            className="h-auto w-full object-contain"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-background/10 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:via-transparent lg:to-background/60" />
           <div className="absolute bottom-3 left-4 rounded-lg bg-background/70 px-3 py-1.5 backdrop-blur">
             <p className="font-display text-xs font-bold tracking-wider text-foreground">
               ॥ जय श्री राम ॥
