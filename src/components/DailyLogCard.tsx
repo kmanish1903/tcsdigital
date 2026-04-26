@@ -1,8 +1,7 @@
 import { CHALISA_TARGET, DailyLogRow, NAAM_TARGET, dayStatus } from "@/lib/dailyLog";
 import { CheckBox } from "./CheckBox";
-import { AlertTriangle, Flame, Minus, Plus, XCircle } from "lucide-react";
+import { AlertTriangle, Flame, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 interface Props {
   log: DailyLogRow;
@@ -71,8 +70,8 @@ function Row({ label, priority, checked, onCheck, right, disabled }: RowProps) {
 }
 
 function NumInput({
-  value, onChange, suffix, disabled,
-}: { value: number; onChange: (n: number) => void; suffix?: string; disabled?: boolean }) {
+  value, onChange, suffix, disabled, wide,
+}: { value: number; onChange: (n: number) => void; suffix?: string; disabled?: boolean; wide?: boolean }) {
   return (
     <div className="flex items-center gap-1.5">
       <input
@@ -81,48 +80,36 @@ function NumInput({
         disabled={disabled}
         value={value || ""}
         onChange={(e) => onChange(parseInt(e.target.value) || 0)}
-        className="h-8 w-16 rounded-md border border-input bg-background px-2 text-right text-sm focus:border-primary focus:outline-none disabled:opacity-60"
+        className={cn(
+          "h-8 rounded-md border border-input bg-background px-2 text-right text-sm focus:border-primary focus:outline-none disabled:opacity-60",
+          wide ? "w-20" : "w-16"
+        )}
       />
       {suffix && <span className="text-xs text-muted-foreground">{suffix}</span>}
     </div>
   );
 }
 
-function Counter({
-  value, onChange, target, disabled,
-}: { value: number; onChange: (n: number) => void; target: number; disabled?: boolean }) {
+function ProgressInput({
+  value, onChange, target, disabled, suffix,
+}: { value: number; onChange: (n: number) => void; target: number; disabled?: boolean; suffix?: string }) {
   const pct = Math.min(100, (value / target) * 100);
+  const reached = value >= target;
   return (
-    <div className="flex items-center gap-2">
-      <Button
-        type="button" size="icon" variant="outline" disabled={disabled || value <= 0}
-        onClick={() => onChange(Math.max(0, value - 1))}
-        className="h-7 w-7"
-      >
-        <Minus className="h-3.5 w-3.5" />
-      </Button>
-      <div className="flex w-24 flex-col items-center">
-        <span className="font-display text-sm font-bold tabular-nums text-foreground">
-          {value}
-          <span className="text-muted-foreground">/{target}</span>
-        </span>
-        <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-secondary">
-          <div
-            className={cn(
-              "h-full rounded-full transition-all",
-              value >= target ? "bg-success" : "bg-primary"
-            )}
-            style={{ width: `${pct}%` }}
-          />
-        </div>
+    <div className="flex flex-col items-end gap-1">
+      <NumInput
+        value={value}
+        onChange={onChange}
+        disabled={disabled}
+        wide
+        suffix={suffix ?? `/ ${target}`}
+      />
+      <div className="h-1 w-28 overflow-hidden rounded-full bg-secondary">
+        <div
+          className={cn("h-full rounded-full transition-all", reached ? "bg-success" : "bg-primary")}
+          style={{ width: `${pct}%` }}
+        />
       </div>
-      <Button
-        type="button" size="icon" variant="outline" disabled={disabled}
-        onClick={() => onChange(value + 1)}
-        className="h-7 w-7"
-      >
-        <Plus className="h-3.5 w-3.5" />
-      </Button>
     </div>
   );
 }
@@ -153,11 +140,12 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           onCheck={(v) => update("naam_jap_done", v)}
           disabled={readOnly}
           right={
-            <Counter
+            <ProgressInput
               value={log.naam_jap_count}
               onChange={(n) => onChange({ ...log, naam_jap_count: n, naam_jap_done: n >= NAAM_TARGET ? true : log.naam_jap_done })}
               target={NAAM_TARGET}
               disabled={readOnly}
+              suffix={`/ ${NAAM_TARGET} Ram Ram`}
             />
           }
         />
@@ -168,7 +156,7 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           onCheck={(v) => update("hanuman_chalisa_done", v)}
           disabled={readOnly}
           right={
-            <Counter
+            <ProgressInput
               value={log.hanuman_chalisa_count}
               onChange={(n) =>
                 onChange({
@@ -179,6 +167,7 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
               }
               target={CHALISA_TARGET}
               disabled={readOnly}
+              suffix={`/ ${CHALISA_TARGET} paath`}
             />
           }
         />

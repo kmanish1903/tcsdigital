@@ -8,6 +8,7 @@ import { SpeakingCard } from "@/components/SpeakingCard";
 import { DsaProgressCard } from "@/components/DsaProgressCard";
 import { CurriculumTracker } from "@/components/CurriculumTracker";
 import { MotivationHero } from "@/components/MotivationHero";
+import { GoalVision } from "@/components/GoalVision";
 import { WeeklyChart } from "@/components/WeeklyChart";
 import { CalendarNav } from "@/components/CalendarNav";
 import { useAuth } from "@/hooks/useAuth";
@@ -122,6 +123,11 @@ const Index = () => {
         {/* Big motivation hero */}
         <div className="mb-6">
           <MotivationHero videosToday={log.videos_today} target={2} dateISO={today} />
+        </div>
+
+        {/* Why I grind — goals */}
+        <div className="mb-6">
+          <GoalVision />
         </div>
 
         {/* Focus note */}
