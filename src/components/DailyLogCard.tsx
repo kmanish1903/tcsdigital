@@ -140,11 +140,12 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           onCheck={(v) => update("naam_jap_done", v)}
           disabled={readOnly}
           right={
-            <Counter
+            <ProgressInput
               value={log.naam_jap_count}
               onChange={(n) => onChange({ ...log, naam_jap_count: n, naam_jap_done: n >= NAAM_TARGET ? true : log.naam_jap_done })}
               target={NAAM_TARGET}
               disabled={readOnly}
+              suffix={`/ ${NAAM_TARGET} Ram Ram`}
             />
           }
         />
@@ -155,7 +156,7 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           onCheck={(v) => update("hanuman_chalisa_done", v)}
           disabled={readOnly}
           right={
-            <Counter
+            <ProgressInput
               value={log.hanuman_chalisa_count}
               onChange={(n) =>
                 onChange({
@@ -166,6 +167,7 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
               }
               target={CHALISA_TARGET}
               disabled={readOnly}
+              suffix={`/ ${CHALISA_TARGET} paath`}
             />
           }
         />
