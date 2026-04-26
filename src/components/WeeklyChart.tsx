@@ -2,12 +2,13 @@ import { useMemo } from "react";
 import {
   ResponsiveContainer, AreaChart, Area, XAxis, YAxis, Tooltip, CartesianGrid,
 } from "recharts";
-import { DayLog } from "@/lib/tracker";
-import { DailyVideoCount } from "@/lib/curriculum";
+import { DailyLogRow } from "@/lib/dailyLog";
 
 interface Props {
-  logs: Record<string, DayLog>;
-  daily: DailyVideoCount;
+  logs: Record<string, DailyLogRow>;
+  days?: number;
+  title?: string;
+  subtitle?: string;
 }
 
 function lastNDates(n: number) {
@@ -22,20 +23,20 @@ function lastNDates(n: number) {
   return out;
 }
 
-export function WeeklyChart({ logs, daily }: Props) {
+export function WeeklyChart({ logs, days = 7, title = "Weekly Performance", subtitle = "Last 7 days activity" }: Props) {
   const data = useMemo(() => {
-    return lastNDates(7).map((iso) => {
+    return lastNDates(days).map((iso) => {
       const log = logs[iso];
       const day = new Date(iso + "T00:00").toLocaleDateString(undefined, { weekday: "short" });
       return {
         day,
         date: iso,
-        DSA: log?.dsaProblems ?? 0,
-        Videos: (daily[iso] || []).length,
-        Speaking: log?.randomSpeaking ?? 0,
+        DSA: log?.dsa_problems ?? 0,
+        Videos: log?.videos_today ?? 0,
+        Speaking: log?.random_speaking ?? 0,
       };
     });
-  }, [logs, daily]);
+  }, [logs, days]);
 
   const totalVideos = data.reduce((a, d) => a + d.Videos, 0);
   const totalDsa = data.reduce((a, d) => a + d.DSA, 0);
@@ -44,8 +45,8 @@ export function WeeklyChart({ logs, daily }: Props) {
     <div className="surface-card p-6 lg:p-7">
       <div className="mb-4 flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h2 className="font-display text-xl font-bold text-foreground">Weekly Performance</h2>
-          <p className="mt-1 text-xs text-muted-foreground">Last 7 days activity</p>
+          <h2 className="font-display text-xl font-bold text-foreground">{title}</h2>
+          <p className="mt-1 text-xs text-muted-foreground">{subtitle}</p>
         </div>
         <div className="flex gap-4 text-right">
           <div>

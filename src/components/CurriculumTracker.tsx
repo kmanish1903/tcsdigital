@@ -1,3 +1,4 @@
+// Updated CurriculumTracker that calls a per-video save callback
 import { useMemo, useState } from "react";
 import { ChevronDown, CheckCircle2, Circle, Clock, PlayCircle } from "lucide-react";
 import {
@@ -7,7 +8,7 @@ import {
 
 interface Props {
   progress: CurriculumProgress;
-  onChange: (next: CurriculumProgress) => void;
+  onSetVideo: (videoId: string, percent: number) => void;
   onVideoComplete?: (videoId: string) => void;
 }
 
@@ -27,7 +28,7 @@ function barTone(p: number) {
 }
 
 function TopicBlock({
-  topic, progress, onChange, onVideoComplete,
+  topic, progress, onSetVideo, onVideoComplete,
 }: { topic: Topic } & Props) {
   const [open, setOpen] = useState(topic.id === "7.1.1");
   const pct = topicPct(topic, progress);
@@ -35,8 +36,7 @@ function TopicBlock({
 
   const setVid = (id: string, val: number) => {
     const prev = progress[id] ?? 0;
-    const next = { ...progress, [id]: val };
-    onChange(next);
+    onSetVideo(id, val);
     if (val >= 100 && prev < 100) onVideoComplete?.(id);
   };
 
@@ -127,7 +127,7 @@ function TopicBlock({
   );
 }
 
-export function CurriculumTracker({ progress, onChange, onVideoComplete }: Props) {
+export function CurriculumTracker({ progress, onSetVideo, onVideoComplete }: Props) {
   const overall = useMemo(() => {
     const all = CURRICULUM.flatMap((t) => t.videos);
     return Math.round(all.reduce((a, v) => a + (progress[v.id] ?? 0), 0) / all.length);
@@ -158,7 +158,7 @@ export function CurriculumTracker({ progress, onChange, onVideoComplete }: Props
             key={t.id}
             topic={t}
             progress={progress}
-            onChange={onChange}
+            onSetVideo={onSetVideo}
             onVideoComplete={onVideoComplete}
           />
         ))}
