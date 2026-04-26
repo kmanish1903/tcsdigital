@@ -1,8 +1,7 @@
 import { CHALISA_TARGET, DailyLogRow, NAAM_TARGET, dayStatus } from "@/lib/dailyLog";
 import { CheckBox } from "./CheckBox";
-import { AlertTriangle, Flame, Minus, Plus, XCircle } from "lucide-react";
+import { AlertTriangle, Flame, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 
 interface Props {
   log: DailyLogRow;
