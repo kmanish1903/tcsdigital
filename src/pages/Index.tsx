@@ -1,86 +1,85 @@
 import { useEffect, useMemo, useState } from "react";
-import { Flame, Download, Target, Trophy } from "lucide-react";
+import { Flame, Download, Target, Trophy, LogOut, BarChart3 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { StatCard } from "@/components/StatCard";
 import { DailyLogCard } from "@/components/DailyLogCard";
 import { SpeakingCard } from "@/components/SpeakingCard";
 import { DsaProgressCard } from "@/components/DsaProgressCard";
 import { CurriculumTracker } from "@/components/CurriculumTracker";
-import { MotivationBanner } from "@/components/MotivationBanner";
+import { MotivationHero } from "@/components/MotivationHero";
 import { WeeklyChart } from "@/components/WeeklyChart";
+import { CalendarNav } from "@/components/CalendarNav";
+import { useAuth } from "@/hooks/useAuth";
+import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
+import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
 import {
-  AppState, DayLog, daysTracked, emptyLog, exportCsv, loadState, saveState,
-  speakingConsistency, streak, todayISO, totalDsa,
-} from "@/lib/tracker";
-import {
-  CurriculumProgress, DailyVideoCount, completedVideos, loadDailyVideos,
-  loadProgress, overallPct, saveDailyVideos, saveProgress, totalVideos,
+  CURRICULUM, completedVideos, overallPct, totalVideos,
 } from "@/lib/curriculum";
+import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
 const Index = () => {
-  const [state, setState] = useState<AppState>(() => loadState());
-  const [progress, setProgress] = useState<CurriculumProgress>(() => loadProgress());
-  const [daily, setDaily] = useState<DailyVideoCount>(() => loadDailyVideos());
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const dateISO = dateToISO(selectedDate);
   const today = todayISO();
 
-  useEffect(() => {
-    if (!state.logs[today]) {
-      const next = { ...state, logs: { ...state.logs, [today]: emptyLog(today) } };
-      setState(next);
-      saveState(next);
-    }
-  }, [today]); // eslint-disable-line
+  const { logs, loading: logsLoading, upsertLocal } = useAllDailyLogs();
+  const { log, setLog, saving } = useDailyLog(dateISO, upsertLocal);
+  const { progress, setVideo } = useCurriculumProgress();
 
-  useEffect(() => { saveState(state); }, [state]);
-  useEffect(() => { saveProgress(progress); }, [progress]);
-  useEffect(() => { saveDailyVideos(daily); }, [daily]);
-
+  // Daily reminder
   useEffect(() => {
     const flag = sessionStorage.getItem("preptrack_reminded");
     if (!flag) {
       setTimeout(() => {
         toast("👋 Daily reminder", {
-          description: "2 videos + Mirror Speaking today. Lock in.",
+          description: "108 Naam Jap, 3 Chalisa, 2 videos. Lock in.",
         });
         sessionStorage.setItem("preptrack_reminded", "1");
       }, 1200);
     }
   }, []);
 
-  const log = state.logs[today] || emptyLog(today);
-  const updateLog = (next: DayLog) => {
-    setState((s) => ({ ...s, logs: { ...s.logs, [today]: next } }));
-  };
+  // Stats from all logs
+  const stats = useMemo(() => {
+    const all = Object.values(logs);
+    const days = all.length;
+    const dsa = all.reduce((a, l) => a + (l.dsa_problems || 0), 0);
+    const speakDays = all.filter((l) => l.mirror_speaking || l.jam_speaking || l.random_speaking > 0).length;
+    const speak = days ? Math.round((speakDays / days) * 100) : 0;
+    // streak
+    let streak = 0;
+    const d = new Date();
+    for (;;) {
+      const iso = dateToISO(d);
+      const l = logs[iso];
+      if (!l || dayStatus(l) === "missed") break;
+      streak++;
+      d.setDate(d.getDate() - 1);
+    }
+    return { days, dsa, speak, streak };
+  }, [logs]);
 
-  const handleVideoComplete = (videoId: string) => {
-    setDaily((d) => {
-      const list = d[today] || [];
-      if (list.includes(videoId)) return d;
-      return { ...d, [today]: [...list, videoId] };
-    });
-    toast.success("Video completed 🎬", { description: "Keep stacking. 8+ LPA loading." });
-  };
-
-  const videosToday = (daily[today] || []).length;
   const curriculumDone = completedVideos(progress);
   const curriculumTotal = totalVideos();
   const curriculumPct = overallPct(progress);
 
-  const stats = useMemo(() => ({
-    days: daysTracked(state.logs),
-    dsa: totalDsa(state.logs),
-    streak: streak(state.logs),
-    speak: speakingConsistency(state.logs),
-  }), [state.logs]);
-
-  const startLabel = useMemo(() => {
-    const d = new Date(state.startDate + "T00:00");
-    return d.toLocaleDateString(undefined, { month: "short", day: "numeric" });
-  }, [state.startDate]);
-
   const handleExport = () => {
-    const csv = exportCsv(state.logs);
+    const headers = [
+      "date","naam_jap","chalisa","meditation","dsa","revision","react","videos","mirror","jam","random_topics","pushups","pullups","status","notes",
+    ];
+    const rows = Object.values(logs)
+      .sort((a, b) => a.log_date.localeCompare(b.log_date))
+      .map((l) => [
+        l.log_date, l.naam_jap_count, l.hanuman_chalisa_count, l.meditation,
+        l.dsa_problems, l.revision, l.react_learning, l.videos_today,
+        l.mirror_speaking, l.jam_speaking, l.random_speaking, l.pushups, l.pullups,
+        dayStatus(l), JSON.stringify(l.notes || ""),
+      ].join(","));
+    const csv = [headers.join(","), ...rows].join("\n");
     const blob = new Blob([csv], { type: "text/csv" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -100,40 +99,43 @@ const Index = () => {
             </h1>
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
               <a className="text-primary" href="#dashboard">Dashboard</a>
-              <a className="text-muted-foreground transition hover:text-foreground" href="#curriculum">Curriculum</a>
               <a className="text-muted-foreground transition hover:text-foreground" href="#log">Daily Log</a>
-              <a className="text-muted-foreground transition hover:text-foreground" href="#speaking">Speaking</a>
+              <a className="text-muted-foreground transition hover:text-foreground" href="#curriculum">Curriculum</a>
+              <button onClick={() => navigate("/weekly")} className="text-muted-foreground transition hover:text-foreground">Weekly</button>
+              <button onClick={() => navigate("/history")} className="text-muted-foreground transition hover:text-foreground">History</button>
             </nav>
           </div>
           <div className="flex items-center gap-2">
-            <button
-              onClick={handleExport}
-              className="hidden items-center gap-2 rounded-full border border-border bg-card px-3 py-2 text-xs font-medium text-muted-foreground transition hover:border-primary/50 hover:text-foreground sm:flex"
-            >
-              <Download className="h-4 w-4" /> Export CSV
-            </button>
+            <span className="hidden text-xs text-muted-foreground sm:inline">
+              {user?.email}
+            </span>
+            <Button variant="outline" size="sm" onClick={handleExport} className="hidden gap-1.5 sm:flex">
+              <Download className="h-3.5 w-3.5" /> CSV
+            </Button>
+            <Button variant="ghost" size="icon" onClick={() => signOut()} aria-label="Sign out">
+              <LogOut className="h-4 w-4" />
+            </Button>
             <ThemeToggle />
           </div>
         </header>
 
-        {/* Motivation banner */}
+        {/* Big motivation hero */}
         <div className="mb-6">
-          <MotivationBanner videosToday={videosToday} target={2} />
+          <MotivationHero videosToday={log.videos_today} target={2} dateISO={today} />
         </div>
 
         {/* Focus note */}
         <div className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
           <Target className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
           <p className="text-sm text-muted-foreground">
-            Highest weight goes to <strong className="text-foreground">Revision</strong>,{" "}
-            <strong className="text-foreground">Mirror Speaking</strong>, and finishing your{" "}
-            <strong className="text-foreground">2 daily videos</strong>.
+            <strong className="text-foreground">Sadhana first</strong> (Naam Jap 108, Chalisa 3, Meditation), then{" "}
+            <strong className="text-foreground">Revision + Mirror Speaking + 2 videos</strong>. That's the recipe.
           </p>
         </div>
 
         {/* Stats */}
         <section id="dashboard" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Days Tracked" value={stats.days} hint={`Since ${startLabel}`} accent />
+          <StatCard label="Days Tracked" value={stats.days} hint="In Lovable Cloud" accent />
           <StatCard
             label="Curriculum"
             value={
@@ -159,21 +161,32 @@ const Index = () => {
           />
         </section>
 
-        {/* Weekly chart */}
+        {/* Calendar nav */}
+        <div className="mb-4">
+          <CalendarNav selected={selectedDate} onChange={setSelectedDate} logs={logs} />
+        </div>
+
+        {/* Weekly chart preview */}
         <section className="mb-8">
-          <WeeklyChart logs={state.logs} daily={daily} />
+          <WeeklyChart logs={logs} />
+          <div className="mt-3 text-right">
+            <Button variant="ghost" size="sm" onClick={() => navigate("/weekly")} className="gap-1.5 text-xs">
+              <BarChart3 className="h-3.5 w-3.5" /> Open weekly progress
+            </Button>
+          </div>
         </section>
 
         {/* Main grid */}
         <section className="mb-8 grid gap-6 lg:grid-cols-5">
           <div id="log" className="lg:col-span-3">
-            <DailyLogCard log={log} onChange={updateLog} />
+            <DailyLogCard log={log} onChange={setLog} />
+            {saving && <p className="mt-2 text-xs text-muted-foreground">Saving…</p>}
           </div>
           <div id="speaking" className="lg:col-span-2">
             <SpeakingCard
-              topicsToday={log.randomSpeaking}
+              topicsToday={log.random_speaking}
               onTopicComplete={() =>
-                updateLog({ ...log, randomSpeaking: log.randomSpeaking + 1 })
+                setLog({ ...log, random_speaking: log.random_speaking + 1 })
               }
             />
           </div>
@@ -183,16 +196,21 @@ const Index = () => {
         <section id="curriculum" className="mb-8">
           <CurriculumTracker
             progress={progress}
-            onChange={setProgress}
-            onVideoComplete={handleVideoComplete}
+            onSetVideo={setVideo}
+            onVideoComplete={() => {
+              setLog({ ...log, videos_today: log.videos_today + 1 });
+              toast.success("Video completed 🎬", { description: "Keep stacking. 8+ LPA loading." });
+            }}
           />
         </section>
 
-        {/* Topic-level DSA confidence */}
+        {/* Topic-level DSA confidence (kept) */}
         <section id="dsa" className="mb-10">
           <DsaProgressCard
-            data={state.dsa}
-            onChange={(next) => setState((s) => ({ ...s, dsa: next }))}
+            data={{
+              Arrays: 90, Strings: 70, "Sliding Window": 50, "Stack & Queue": 30, "Linked List": 15,
+            }}
+            onChange={() => {}}
           />
         </section>
 
