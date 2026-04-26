@@ -14,7 +14,144 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      curriculum_progress: {
+        Row: {
+          id: string
+          percent: number
+          updated_at: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          id?: string
+          percent?: number
+          updated_at?: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          id?: string
+          percent?: number
+          updated_at?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: []
+      }
+      daily_logs: {
+        Row: {
+          created_at: string
+          dsa_problems: number
+          hanuman_chalisa_count: number
+          hanuman_chalisa_done: boolean
+          id: string
+          jam_speaking: boolean
+          log_date: string
+          meditation: boolean
+          mirror_speaking: boolean
+          naam_jap_count: number
+          naam_jap_done: boolean
+          notes: string | null
+          pullups: number
+          pushups: number
+          random_speaking: number
+          react_learning: boolean
+          revision: boolean
+          updated_at: string
+          user_id: string
+          videos_today: number
+        }
+        Insert: {
+          created_at?: string
+          dsa_problems?: number
+          hanuman_chalisa_count?: number
+          hanuman_chalisa_done?: boolean
+          id?: string
+          jam_speaking?: boolean
+          log_date: string
+          meditation?: boolean
+          mirror_speaking?: boolean
+          naam_jap_count?: number
+          naam_jap_done?: boolean
+          notes?: string | null
+          pullups?: number
+          pushups?: number
+          random_speaking?: number
+          react_learning?: boolean
+          revision?: boolean
+          updated_at?: string
+          user_id: string
+          videos_today?: number
+        }
+        Update: {
+          created_at?: string
+          dsa_problems?: number
+          hanuman_chalisa_count?: number
+          hanuman_chalisa_done?: boolean
+          id?: string
+          jam_speaking?: boolean
+          log_date?: string
+          meditation?: boolean
+          mirror_speaking?: boolean
+          naam_jap_count?: number
+          naam_jap_done?: boolean
+          notes?: string | null
+          pullups?: number
+          pushups?: number
+          random_speaking?: number
+          react_learning?: boolean
+          revision?: boolean
+          updated_at?: string
+          user_id?: string
+          videos_today?: number
+        }
+        Relationships: []
+      }
+      daily_video_completions: {
+        Row: {
+          created_at: string
+          id: string
+          log_date: string
+          user_id: string
+          video_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_date: string
+          user_id: string
+          video_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          user_id?: string
+          video_id?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
