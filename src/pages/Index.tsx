@@ -1,21 +1,29 @@
 import { useEffect, useMemo, useState } from "react";
-import { Flame, Download, Target } from "lucide-react";
+import { Flame, Download, Target, Trophy } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { StatCard } from "@/components/StatCard";
 import { DailyLogCard } from "@/components/DailyLogCard";
 import { SpeakingCard } from "@/components/SpeakingCard";
 import { DsaProgressCard } from "@/components/DsaProgressCard";
+import { CurriculumTracker } from "@/components/CurriculumTracker";
+import { MotivationBanner } from "@/components/MotivationBanner";
+import { WeeklyChart } from "@/components/WeeklyChart";
 import {
   AppState, DayLog, daysTracked, emptyLog, exportCsv, loadState, saveState,
   speakingConsistency, streak, todayISO, totalDsa,
 } from "@/lib/tracker";
+import {
+  CurriculumProgress, DailyVideoCount, completedVideos, loadDailyVideos,
+  loadProgress, overallPct, saveDailyVideos, saveProgress, totalVideos,
+} from "@/lib/curriculum";
 import { toast } from "sonner";
 
 const Index = () => {
   const [state, setState] = useState<AppState>(() => loadState());
+  const [progress, setProgress] = useState<CurriculumProgress>(() => loadProgress());
+  const [daily, setDaily] = useState<DailyVideoCount>(() => loadDailyVideos());
   const today = todayISO();
 
-  // Ensure today's log exists
   useEffect(() => {
     if (!state.logs[today]) {
       const next = { ...state, logs: { ...state.logs, [today]: emptyLog(today) } };
@@ -25,14 +33,15 @@ const Index = () => {
   }, [today]); // eslint-disable-line
 
   useEffect(() => { saveState(state); }, [state]);
+  useEffect(() => { saveProgress(progress); }, [progress]);
+  useEffect(() => { saveDailyVideos(daily); }, [daily]);
 
-  // Daily reminder (once per session)
   useEffect(() => {
     const flag = sessionStorage.getItem("preptrack_reminded");
     if (!flag) {
       setTimeout(() => {
         toast("👋 Daily reminder", {
-          description: "Did you complete your Mirror Speaking today?",
+          description: "2 videos + Mirror Speaking today. Lock in.",
         });
         sessionStorage.setItem("preptrack_reminded", "1");
       }, 1200);
@@ -40,10 +49,23 @@ const Index = () => {
   }, []);
 
   const log = state.logs[today] || emptyLog(today);
-
   const updateLog = (next: DayLog) => {
     setState((s) => ({ ...s, logs: { ...s.logs, [today]: next } }));
   };
+
+  const handleVideoComplete = (videoId: string) => {
+    setDaily((d) => {
+      const list = d[today] || [];
+      if (list.includes(videoId)) return d;
+      return { ...d, [today]: [...list, videoId] };
+    });
+    toast.success("Video completed 🎬", { description: "Keep stacking. 8+ LPA loading." });
+  };
+
+  const videosToday = (daily[today] || []).length;
+  const curriculumDone = completedVideos(progress);
+  const curriculumTotal = totalVideos();
+  const curriculumPct = overallPct(progress);
 
   const stats = useMemo(() => ({
     days: daysTracked(state.logs),
@@ -71,16 +93,16 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         {/* Header */}
-        <header className="mb-8 flex flex-wrap items-center justify-between gap-4">
+        <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-8">
             <h1 className="font-display text-2xl font-bold tracking-tight text-foreground">
               Prep<span className="text-primary">Track</span>
             </h1>
             <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
               <a className="text-primary" href="#dashboard">Dashboard</a>
+              <a className="text-muted-foreground transition hover:text-foreground" href="#curriculum">Curriculum</a>
               <a className="text-muted-foreground transition hover:text-foreground" href="#log">Daily Log</a>
               <a className="text-muted-foreground transition hover:text-foreground" href="#speaking">Speaking</a>
-              <a className="text-muted-foreground transition hover:text-foreground" href="#dsa">DSA</a>
             </nav>
           </div>
           <div className="flex items-center gap-2">
@@ -94,27 +116,36 @@ const Index = () => {
           </div>
         </header>
 
-        {/* Focus banner */}
-        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-primary/30 bg-gradient-hero p-4 text-primary-foreground shadow-glow">
-          <Target className="mt-0.5 h-5 w-5 shrink-0" />
-          <p className="text-sm font-medium">
-            Focus more on <strong>Revision</strong> &amp; <strong>Mirror Speaking</strong> — they carry the highest weight for interview success.
+        {/* Motivation banner */}
+        <div className="mb-6">
+          <MotivationBanner videosToday={videosToday} target={2} />
+        </div>
+
+        {/* Focus note */}
+        <div className="mb-6 flex items-start gap-3 rounded-2xl border border-border bg-card p-4">
+          <Target className="mt-0.5 h-5 w-5 shrink-0 text-primary" />
+          <p className="text-sm text-muted-foreground">
+            Highest weight goes to <strong className="text-foreground">Revision</strong>,{" "}
+            <strong className="text-foreground">Mirror Speaking</strong>, and finishing your{" "}
+            <strong className="text-foreground">2 daily videos</strong>.
           </p>
         </div>
 
         {/* Stats */}
-        <section id="dashboard" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <section id="dashboard" className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <StatCard label="Days Tracked" value={stats.days} hint={`Since ${startLabel}`} accent />
           <StatCard
-            label="Days Tracked"
-            value={stats.days}
-            hint={`Since ${startLabel}`}
-            accent
+            label="Curriculum"
+            value={
+              <span className="flex items-baseline gap-2">
+                {curriculumPct}%
+                <span className="text-sm font-medium text-muted-foreground">{curriculumDone}/{curriculumTotal}</span>
+              </span>
+            }
+            hint="Videos completed"
+            icon={<Trophy className="h-7 w-7 text-primary" />}
           />
-          <StatCard
-            label="DSA Solved"
-            value={stats.dsa}
-            hint="Problems total"
-          />
+          <StatCard label="DSA Solved" value={stats.dsa} hint="Problems total" />
           <StatCard
             label="Habit Streak"
             icon={<Flame className="h-7 w-7 text-warning" />}
@@ -124,8 +155,13 @@ const Index = () => {
                 <span className="text-sm font-medium text-muted-foreground">days</span>
               </span>
             }
-            hint={`Speaking consistency: ${stats.speak}%`}
+            hint={`Speaking: ${stats.speak}%`}
           />
+        </section>
+
+        {/* Weekly chart */}
+        <section className="mb-8">
+          <WeeklyChart logs={state.logs} daily={daily} />
         </section>
 
         {/* Main grid */}
@@ -143,7 +179,16 @@ const Index = () => {
           </div>
         </section>
 
-        {/* DSA */}
+        {/* Curriculum */}
+        <section id="curriculum" className="mb-8">
+          <CurriculumTracker
+            progress={progress}
+            onChange={setProgress}
+            onVideoComplete={handleVideoComplete}
+          />
+        </section>
+
+        {/* Topic-level DSA confidence */}
         <section id="dsa" className="mb-10">
           <DsaProgressCard
             data={state.dsa}
@@ -151,10 +196,9 @@ const Index = () => {
           />
         </section>
 
-        {/* Footer goal */}
         <footer className="pb-10 text-center">
           <p className="font-display text-sm italic text-muted-foreground sm:text-base">
-            "Consistency + Revision + Communication = Placement Success"
+            "3.5 LPA was the start. Consistency is the upgrade."
           </p>
         </footer>
       </div>
