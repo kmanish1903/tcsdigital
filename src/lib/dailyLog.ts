@@ -70,6 +70,7 @@ export function dateToISO(d: Date) {
 }
 
 export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
+export function dayScore(l: DailyLogRow): number {
   let score = 0;
   let max = 0;
   // Spiritual
@@ -85,7 +86,11 @@ export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
   max += 1; if (l.react_learning) score += 1;
   max += 1; if (l.jam_speaking) score += 1;
   max += 1; if (l.random_speaking >= 3) score += 1;
-  const pct = score / max;
+  return Math.round((score / max) * 100);
+}
+
+export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
+  const pct = dayScore(l) / 100;
   if (pct >= 0.75) return "productive";
   if (pct >= 0.4) return "average";
   return "missed";
