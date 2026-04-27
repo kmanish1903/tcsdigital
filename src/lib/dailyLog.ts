@@ -20,6 +20,10 @@ export type DailyLogRow = {
   anulom_vilom: boolean;
   temple_visit: boolean;
   fasting: boolean;
+  instagram_minutes: number;
+  youtube_minutes: number;
+  phone_pickups: number;
+  deep_work_blocks: number;
   notes: string | null;
 };
 
@@ -46,6 +50,10 @@ export function emptyDailyLog(date: string): DailyLogRow {
     anulom_vilom: false,
     temple_visit: false,
     fasting: false,
+    instagram_minutes: 0,
+    youtube_minutes: 0,
+    phone_pickups: 0,
+    deep_work_blocks: 0,
     notes: "",
   };
 }
