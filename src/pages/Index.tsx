@@ -15,6 +15,7 @@ import { AiReflectionCoach } from "@/components/AiReflectionCoach";
 import { CalendarNav } from "@/components/CalendarNav";
 import { DailyChallengeCard } from "@/components/DailyChallengeCard";
 import { TodayScoreBar } from "@/components/TodayScoreBar";
+import { PersonalMotivation } from "@/components/PersonalMotivation";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
