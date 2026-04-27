@@ -40,8 +40,10 @@ export type Database = {
       }
       daily_logs: {
         Row: {
+          anulom_vilom: boolean
           created_at: string
           dsa_problems: number
+          fasting: boolean
           hanuman_chalisa_count: number
           hanuman_chalisa_done: boolean
           id: string
@@ -57,13 +59,16 @@ export type Database = {
           random_speaking: number
           react_learning: boolean
           revision: boolean
+          temple_visit: boolean
           updated_at: string
           user_id: string
           videos_today: number
         }
         Insert: {
+          anulom_vilom?: boolean
           created_at?: string
           dsa_problems?: number
+          fasting?: boolean
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
@@ -79,13 +84,16 @@ export type Database = {
           random_speaking?: number
           react_learning?: boolean
           revision?: boolean
+          temple_visit?: boolean
           updated_at?: string
           user_id: string
           videos_today?: number
         }
         Update: {
+          anulom_vilom?: boolean
           created_at?: string
           dsa_problems?: number
+          fasting?: boolean
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
@@ -101,6 +109,7 @@ export type Database = {
           random_speaking?: number
           react_learning?: boolean
           revision?: boolean
+          temple_visit?: boolean
           updated_at?: string
           user_id?: string
           videos_today?: number

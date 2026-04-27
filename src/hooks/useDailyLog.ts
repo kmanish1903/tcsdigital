@@ -92,6 +92,9 @@ export function useDailyLog(dateISO: string, onUpsert?: (row: DailyLogRow) => vo
         random_speaking: log.random_speaking,
         pushups: log.pushups,
         pullups: log.pullups,
+        anulom_vilom: log.anulom_vilom,
+        temple_visit: log.temple_visit,
+        fasting: log.fasting,
         notes: log.notes,
       };
       const { data, error } = await supabase
