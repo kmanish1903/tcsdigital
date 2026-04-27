@@ -13,6 +13,8 @@ import { WeeklyChart } from "@/components/WeeklyChart";
 import { HabitHeatmap } from "@/components/HabitHeatmap";
 import { AiReflectionCoach } from "@/components/AiReflectionCoach";
 import { CalendarNav } from "@/components/CalendarNav";
+import { DailyChallengeCard } from "@/components/DailyChallengeCard";
+import { TodayScoreBar } from "@/components/TodayScoreBar";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
@@ -127,6 +129,11 @@ const Index = () => {
           <MotivationHero videosToday={log.videos_today} target={2} dateISO={today} />
         </div>
 
+        {/* Today's score — prominent */}
+        <div className="mb-6">
+          <TodayScoreBar log={log} streak={stats.streak} />
+        </div>
+
         {/* Why I grind — goals */}
         <div className="mb-6">
           <GoalVision />
@@ -196,7 +203,8 @@ const Index = () => {
             {saving && <p className="-mt-4 text-xs text-muted-foreground">Saving…</p>}
             <AiReflectionCoach dateISO={dateISO} log={log} />
           </div>
-          <div id="speaking" className="lg:col-span-2">
+          <div id="speaking" className="lg:col-span-2 space-y-6">
+            <DailyChallengeCard />
             <SpeakingCard
               topicsToday={log.random_speaking}
               onTopicComplete={() =>
