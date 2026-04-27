@@ -135,6 +135,23 @@ const Index = () => {
           <TodayScoreBar log={log} streak={stats.streak} />
         </div>
 
+        {/* Personal harsh-truth + motivation (changes daily, by name) */}
+        <div className="mb-6">
+          <PersonalMotivation />
+        </div>
+
+        {/* Power trio: AI Coach + Daily Challenges + 1-Min Speaking */}
+        <section className="mb-8 grid gap-6 lg:grid-cols-3">
+          <AiReflectionCoach dateISO={dateISO} log={log} />
+          <DailyChallengeCard />
+          <SpeakingCard
+            topicsToday={log.random_speaking}
+            onTopicComplete={() =>
+              setLog({ ...log, random_speaking: log.random_speaking + 1 })
+            }
+          />
+        </section>
+
         {/* Why I grind — goals */}
         <div className="mb-6">
           <GoalVision />
@@ -197,22 +214,10 @@ const Index = () => {
           <HabitHeatmap logs={logs} />
         </section>
 
-        {/* Main grid */}
-        <section className="mb-8 grid gap-6 lg:grid-cols-5">
-          <div id="log" className="lg:col-span-3 space-y-6">
-            <DailyLogCard log={log} onChange={setLog} />
-            {saving && <p className="-mt-4 text-xs text-muted-foreground">Saving…</p>}
-            <AiReflectionCoach dateISO={dateISO} log={log} />
-          </div>
-          <div id="speaking" className="lg:col-span-2 space-y-6">
-            <DailyChallengeCard />
-            <SpeakingCard
-              topicsToday={log.random_speaking}
-              onTopicComplete={() =>
-                setLog({ ...log, random_speaking: log.random_speaking + 1 })
-              }
-            />
-          </div>
+        {/* Daily log */}
+        <section id="log" className="mb-8">
+          <DailyLogCard log={log} onChange={setLog} />
+          {saving && <p className="mt-2 text-xs text-muted-foreground">Saving…</p>}
         </section>
 
         {/* Curriculum */}
