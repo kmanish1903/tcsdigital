@@ -293,6 +293,13 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           disabled={readOnly}
           right={<NumInput disabled={readOnly} value={log.pullups} onChange={(n) => update("pullups", n)} suffix="reps" />}
         />
+        <Row
+          label="Squats"
+          checked={log.squats > 0}
+          onCheck={(v) => update("squats", v ? Math.max(10, log.squats) : 0)}
+          disabled={readOnly}
+          right={<NumInput disabled={readOnly} value={log.squats} onChange={(n) => update("squats", n)} suffix="reps" />}
+        />
       </div>
 
       {/* FOCUS & DISTRACTIONS */}

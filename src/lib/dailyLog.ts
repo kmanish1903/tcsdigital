@@ -17,6 +17,7 @@ export type DailyLogRow = {
   random_speaking: number;
   pushups: number;
   pullups: number;
+  squats: number;
   anulom_vilom: boolean;
   temple_visit: boolean;
   fasting: boolean;
@@ -47,6 +48,7 @@ export function emptyDailyLog(date: string): DailyLogRow {
     random_speaking: 0,
     pushups: 0,
     pullups: 0,
+    squats: 0,
     anulom_vilom: false,
     temple_visit: false,
     fasting: false,

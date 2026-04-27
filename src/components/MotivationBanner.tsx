@@ -18,7 +18,7 @@ export function MotivationBanner({ videosToday, target = 2 }: Props) {
               3.5 LPA → next chapter
             </p>
             <h2 className="mt-1 font-display text-lg font-bold leading-snug sm:text-xl">
-              You already cracked TCS. Now level up — aim for 8–15 LPA product roles.
+              You already cracked TCS. Now level up — aim for 9–15 LPA product roles.
             </h2>
             <p className="mt-1 text-xs opacity-90 sm:text-sm">
               Two videos every single day. No skips. Compound effort beats raw talent.

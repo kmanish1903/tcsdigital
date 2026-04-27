@@ -101,6 +101,7 @@ export type Database = {
           random_speaking: number
           react_learning: boolean
           revision: boolean
+          squats: number
           temple_visit: boolean
           updated_at: string
           user_id: string
@@ -130,6 +131,7 @@ export type Database = {
           random_speaking?: number
           react_learning?: boolean
           revision?: boolean
+          squats?: number
           temple_visit?: boolean
           updated_at?: string
           user_id: string
@@ -159,6 +161,7 @@ export type Database = {
           random_speaking?: number
           react_learning?: boolean
           revision?: boolean
+          squats?: number
           temple_visit?: boolean
           updated_at?: string
           user_id?: string
