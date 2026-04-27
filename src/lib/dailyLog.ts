@@ -69,7 +69,6 @@ export function dateToISO(d: Date) {
   return new Date(d.getTime() - tz).toISOString().slice(0, 10);
 }
 
-export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
 export function dayScore(l: DailyLogRow): number {
   let score = 0;
   let max = 0;
