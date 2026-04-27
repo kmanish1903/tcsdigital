@@ -68,6 +68,7 @@ export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
   max += 2; if (l.naam_jap_done || l.naam_jap_count >= NAAM_TARGET) score += 2;
   max += 2; if (l.hanuman_chalisa_done || l.hanuman_chalisa_count >= CHALISA_TARGET) score += 2;
   max += 1; if (l.meditation) score += 1;
+  max += 1; if (l.anulom_vilom) score += 1;
   // Learning (HIGH priority)
   max += 2; if (l.revision) score += 2;
   max += 2; if (l.mirror_speaking) score += 2;
