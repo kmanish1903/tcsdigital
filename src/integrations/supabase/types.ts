@@ -14,6 +14,45 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_reflections: {
+        Row: {
+          created_at: string
+          daily_score: number | null
+          feedback_en: string | null
+          feedback_hi: string | null
+          feedback_te: string | null
+          focus_question: string | null
+          id: string
+          log_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          daily_score?: number | null
+          feedback_en?: string | null
+          feedback_hi?: string | null
+          feedback_te?: string | null
+          focus_question?: string | null
+          id?: string
+          log_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          daily_score?: number | null
+          feedback_en?: string | null
+          feedback_hi?: string | null
+          feedback_te?: string | null
+          focus_question?: string | null
+          id?: string
+          log_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       curriculum_progress: {
         Row: {
           id: string
@@ -42,11 +81,13 @@ export type Database = {
         Row: {
           anulom_vilom: boolean
           created_at: string
+          deep_work_blocks: number
           dsa_problems: number
           fasting: boolean
           hanuman_chalisa_count: number
           hanuman_chalisa_done: boolean
           id: string
+          instagram_minutes: number
           jam_speaking: boolean
           log_date: string
           meditation: boolean
@@ -54,6 +95,7 @@ export type Database = {
           naam_jap_count: number
           naam_jap_done: boolean
           notes: string | null
+          phone_pickups: number
           pullups: number
           pushups: number
           random_speaking: number
@@ -63,15 +105,18 @@ export type Database = {
           updated_at: string
           user_id: string
           videos_today: number
+          youtube_minutes: number
         }
         Insert: {
           anulom_vilom?: boolean
           created_at?: string
+          deep_work_blocks?: number
           dsa_problems?: number
           fasting?: boolean
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
+          instagram_minutes?: number
           jam_speaking?: boolean
           log_date: string
           meditation?: boolean
@@ -79,6 +124,7 @@ export type Database = {
           naam_jap_count?: number
           naam_jap_done?: boolean
           notes?: string | null
+          phone_pickups?: number
           pullups?: number
           pushups?: number
           random_speaking?: number
@@ -88,15 +134,18 @@ export type Database = {
           updated_at?: string
           user_id: string
           videos_today?: number
+          youtube_minutes?: number
         }
         Update: {
           anulom_vilom?: boolean
           created_at?: string
+          deep_work_blocks?: number
           dsa_problems?: number
           fasting?: boolean
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
+          instagram_minutes?: number
           jam_speaking?: boolean
           log_date?: string
           meditation?: boolean
@@ -104,6 +153,7 @@ export type Database = {
           naam_jap_count?: number
           naam_jap_done?: boolean
           notes?: string | null
+          phone_pickups?: number
           pullups?: number
           pushups?: number
           random_speaking?: number
@@ -113,6 +163,7 @@ export type Database = {
           updated_at?: string
           user_id?: string
           videos_today?: number
+          youtube_minutes?: number
         }
         Relationships: []
       }

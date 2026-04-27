@@ -10,6 +10,8 @@ import { CurriculumTracker } from "@/components/CurriculumTracker";
 import { MotivationHero } from "@/components/MotivationHero";
 import { GoalVision } from "@/components/GoalVision";
 import { WeeklyChart } from "@/components/WeeklyChart";
+import { HabitHeatmap } from "@/components/HabitHeatmap";
+import { AiReflectionCoach } from "@/components/AiReflectionCoach";
 import { CalendarNav } from "@/components/CalendarNav";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
@@ -182,11 +184,17 @@ const Index = () => {
           </div>
         </section>
 
+        {/* Consistency heatmap */}
+        <section className="mb-8">
+          <HabitHeatmap logs={logs} />
+        </section>
+
         {/* Main grid */}
         <section className="mb-8 grid gap-6 lg:grid-cols-5">
-          <div id="log" className="lg:col-span-3">
+          <div id="log" className="lg:col-span-3 space-y-6">
             <DailyLogCard log={log} onChange={setLog} />
-            {saving && <p className="mt-2 text-xs text-muted-foreground">Saving…</p>}
+            {saving && <p className="-mt-4 text-xs text-muted-foreground">Saving…</p>}
+            <AiReflectionCoach dateISO={dateISO} log={log} />
           </div>
           <div id="speaking" className="lg:col-span-2">
             <SpeakingCard

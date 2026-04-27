@@ -20,6 +20,10 @@ export type DailyLogRow = {
   anulom_vilom: boolean;
   temple_visit: boolean;
   fasting: boolean;
+  instagram_minutes: number;
+  youtube_minutes: number;
+  phone_pickups: number;
+  deep_work_blocks: number;
   notes: string | null;
 };
 
@@ -46,6 +50,10 @@ export function emptyDailyLog(date: string): DailyLogRow {
     anulom_vilom: false,
     temple_visit: false,
     fasting: false,
+    instagram_minutes: 0,
+    youtube_minutes: 0,
+    phone_pickups: 0,
+    deep_work_blocks: 0,
     notes: "",
   };
 }
@@ -61,7 +69,7 @@ export function dateToISO(d: Date) {
   return new Date(d.getTime() - tz).toISOString().slice(0, 10);
 }
 
-export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
+export function dayScore(l: DailyLogRow): number {
   let score = 0;
   let max = 0;
   // Spiritual
@@ -77,7 +85,11 @@ export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
   max += 1; if (l.react_learning) score += 1;
   max += 1; if (l.jam_speaking) score += 1;
   max += 1; if (l.random_speaking >= 3) score += 1;
-  const pct = score / max;
+  return Math.round((score / max) * 100);
+}
+
+export function dayStatus(l: DailyLogRow): "productive" | "average" | "missed" {
+  const pct = dayScore(l) / 100;
   if (pct >= 0.75) return "productive";
   if (pct >= 0.4) return "average";
   return "missed";

@@ -295,6 +295,40 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
         />
       </div>
 
+      {/* FOCUS & DISTRACTIONS */}
+      <SectionTitle>🚫 Focus & Distractions</SectionTitle>
+      <div className="divide-y divide-border/60">
+        <Row
+          label="Deep Work Blocks (25 min)"
+          priority="HIGH"
+          checked={log.deep_work_blocks > 0}
+          onCheck={(v) => update("deep_work_blocks", v ? Math.max(1, log.deep_work_blocks) : 0)}
+          disabled={readOnly}
+          right={<NumInput disabled={readOnly} value={log.deep_work_blocks} onChange={(n) => update("deep_work_blocks", n)} suffix="blocks" />}
+        />
+        <Row
+          label="Instagram Time"
+          checked={log.instagram_minutes === 0}
+          onCheck={(v) => update("instagram_minutes", v ? 0 : Math.max(1, log.instagram_minutes))}
+          disabled={readOnly}
+          right={<NumInput disabled={readOnly} value={log.instagram_minutes} onChange={(n) => update("instagram_minutes", n)} suffix="min" />}
+        />
+        <Row
+          label="YouTube (non-learning)"
+          checked={log.youtube_minutes === 0}
+          onCheck={(v) => update("youtube_minutes", v ? 0 : Math.max(1, log.youtube_minutes))}
+          disabled={readOnly}
+          right={<NumInput disabled={readOnly} value={log.youtube_minutes} onChange={(n) => update("youtube_minutes", n)} suffix="min" />}
+        />
+        <Row
+          label="Phone pickups before 10am"
+          checked={log.phone_pickups === 0}
+          onCheck={(v) => update("phone_pickups", v ? 0 : Math.max(1, log.phone_pickups))}
+          disabled={readOnly}
+          right={<NumInput disabled={readOnly} value={log.phone_pickups} onChange={(n) => update("phone_pickups", n)} suffix="times" />}
+        />
+      </div>
+
       <textarea
         placeholder="What I learned today (React notes, insights)..."
         value={log.notes || ""}
