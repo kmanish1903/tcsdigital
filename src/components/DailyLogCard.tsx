@@ -178,6 +178,41 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           disabled={readOnly}
           right={<span className={log.meditation ? "font-semibold text-success" : "text-muted-foreground"}>{log.meditation ? "Done" : "—"}</span>}
         />
+        <Row
+          label="Anulom Vilom Pranayama"
+          priority="SADHANA"
+          checked={log.anulom_vilom}
+          onCheck={(v) => update("anulom_vilom", v)}
+          disabled={readOnly}
+          right={<span className={log.anulom_vilom ? "font-semibold text-success" : "text-muted-foreground"}>{log.anulom_vilom ? "10 min ✓" : "10 min · morning"}</span>}
+        />
+      </div>
+
+      {/* DISCIPLINE — temple, fasting */}
+      <SectionTitle>🛕 Discipline & Devotion</SectionTitle>
+      <div className="divide-y divide-border/60">
+        <Row
+          label="Hanuman Temple Visit"
+          checked={log.temple_visit}
+          onCheck={(v) => update("temple_visit", v)}
+          disabled={readOnly}
+          right={
+            <span className={log.temple_visit ? "font-semibold text-success" : "text-muted-foreground"}>
+              {log.temple_visit ? "Visited" : "Tue & Sat"}
+            </span>
+          }
+        />
+        <Row
+          label="Fasting (Vrat)"
+          checked={log.fasting}
+          onCheck={(v) => update("fasting", v)}
+          disabled={readOnly}
+          right={
+            <span className={log.fasting ? "font-semibold text-success" : "text-muted-foreground"}>
+              {log.fasting ? "Observed" : "Saturday"}
+            </span>
+          }
+        />
       </div>
 
       {/* LEARNING */}
