@@ -4,7 +4,7 @@ import { Home, Bike, Briefcase, Heart } from "lucide-react";
 
 const GOALS = [
   { icon: Home, label: "Dream Home", note: "Built for family • Jai Shree Ram 🚩" },
-  { icon: Briefcase, label: "8–15 LPA Role", note: "Beyond TCS 3.5 — product company" },
+  { icon: Briefcase, label: "9–15 LPA Role", note: "Beyond TCS 3.5 — product company" },
   { icon: Bike, label: "Royal Enfield Bullet 350", note: "Battalion Black • earned, not gifted" },
   { icon: Heart, label: "Top 1% Physique & Speech", note: "Daily reps. Daily mirror. No excuses." },
 ];

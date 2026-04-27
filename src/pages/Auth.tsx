@@ -88,7 +88,7 @@ export default function Auth() {
             Prep<span className="text-primary">Track</span>
           </div>
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">3.5 LPA → 8–15 LPA</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.25em] text-primary">3.5 LPA → 9–15 LPA</p>
             <h1 className="mt-3 font-display text-4xl font-bold leading-tight">
               Discipline, devotion, and 2 videos a day.
             </h1>

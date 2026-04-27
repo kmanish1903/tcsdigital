@@ -20,7 +20,7 @@ export function TodayScoreBar({ log, streak }: Props) {
 
   // Encouragement message
   let msg = "Stack the wins. Sadhana → Learning → Speaking → Fitness.";
-  if (score >= 75) msg = "This is what 8–15 LPA energy looks like. Keep going.";
+  if (score >= 75) msg = "This is what 9–15 LPA energy looks like. Keep going.";
   else if (score >= 50) msg = "You're close. Knock out 2 more habits to hit Top 1% zone.";
   else if (score >= 25) msg = "Slow start — finish revision, mirror speaking, and 2 videos.";
   else msg = "Day's not over. Start with 108 Naam Jap → momentum follows.";

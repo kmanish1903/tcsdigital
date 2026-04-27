@@ -50,7 +50,7 @@ export function MotivationHero({ videosToday, target = 2, dateISO }: Props) {
         <div className="flex flex-col justify-between">
           <div>
             <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.25em] text-primary">
-              <Sparkles className="h-3.5 w-3.5" /> 3.5 LPA → 8–15 LPA
+              <Sparkles className="h-3.5 w-3.5" /> 3.5 LPA → 9–15 LPA
             </p>
             <h1 className="mt-3 font-display text-3xl font-bold leading-[1.1] text-foreground sm:text-4xl lg:text-5xl">
               You already cracked TCS.
