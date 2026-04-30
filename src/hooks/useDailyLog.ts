@@ -99,6 +99,16 @@ export function useDailyLog(dateISO: string, onUpsert?: (row: DailyLogRow) => vo
         youtube_minutes: log.youtube_minutes,
         phone_pickups: log.phone_pickups,
         deep_work_blocks: log.deep_work_blocks,
+        squats: (log as any).squats ?? 0,
+        energy: log.energy ?? 0,
+        focus: log.focus ?? 0,
+        urges: log.urges ?? 0,
+        pillar_wealth: log.pillar_wealth ?? false,
+        pillar_communication: log.pillar_communication ?? false,
+        pillar_ethics: log.pillar_ethics ?? false,
+        pillar_influence: log.pillar_influence ?? false,
+        pillar_power: log.pillar_power ?? false,
+        evening_reflection: log.evening_reflection ?? null,
         notes: log.notes,
       };
       const { data, error } = await supabase

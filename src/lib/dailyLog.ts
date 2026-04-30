@@ -25,6 +25,15 @@ export type DailyLogRow = {
   youtube_minutes: number;
   phone_pickups: number;
   deep_work_blocks: number;
+  energy: number;
+  focus: number;
+  urges: number;
+  pillar_wealth: boolean;
+  pillar_communication: boolean;
+  pillar_ethics: boolean;
+  pillar_influence: boolean;
+  pillar_power: boolean;
+  evening_reflection: { thanked?: string; regret?: string; tomorrow?: string } | null;
   notes: string | null;
 };
 
@@ -56,6 +65,15 @@ export function emptyDailyLog(date: string): DailyLogRow {
     youtube_minutes: 0,
     phone_pickups: 0,
     deep_work_blocks: 0,
+    energy: 0,
+    focus: 0,
+    urges: 0,
+    pillar_wealth: false,
+    pillar_communication: false,
+    pillar_ethics: false,
+    pillar_influence: false,
+    pillar_power: false,
+    evening_reflection: null,
     notes: "",
   };
 }
@@ -87,6 +105,12 @@ export function dayScore(l: DailyLogRow): number {
   max += 1; if (l.react_learning) score += 1;
   max += 1; if (l.jam_speaking) score += 1;
   max += 1; if (l.random_speaking >= 3) score += 1;
+  // Top 1% pillars
+  max += 1; if (l.pillar_wealth) score += 1;
+  max += 1; if (l.pillar_communication) score += 1;
+  max += 1; if (l.pillar_ethics) score += 1;
+  max += 1; if (l.pillar_influence) score += 1;
+  max += 1; if (l.pillar_power) score += 1;
   return Math.round((score / max) * 100);
 }
 
