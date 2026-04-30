@@ -261,6 +261,9 @@ const Index = () => {
           </p>
         </footer>
       </div>
+
+      {/* Floating Hanuman Coach */}
+      <HanumanCoachChat context={{ log, streak: stats.streak, date: dateISO }} />
     </div>
   );
 };
