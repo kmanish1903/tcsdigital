@@ -53,6 +53,108 @@ export type Database = {
         }
         Relationships: []
       }
+      brahmacharya_days: {
+        Row: {
+          created_at: string
+          id: string
+          log_date: string
+          notes: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_date: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_date?: string
+          notes?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      brahmacharya_journey: {
+        Row: {
+          best_streak: number
+          created_at: string
+          current_phase: number
+          current_streak: number
+          id: string
+          phase1_target: number
+          phase2_target: number
+          started_on: string
+          total_clean_days: number
+          total_slips: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_streak?: number
+          created_at?: string
+          current_phase?: number
+          current_streak?: number
+          id?: string
+          phase1_target?: number
+          phase2_target?: number
+          started_on?: string
+          total_clean_days?: number
+          total_slips?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_streak?: number
+          created_at?: string
+          current_phase?: number
+          current_streak?: number
+          id?: string
+          phase1_target?: number
+          phase2_target?: number
+          started_on?: string
+          total_clean_days?: number
+          total_slips?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      coach_messages: {
+        Row: {
+          coach_mode: string | null
+          content: string
+          created_at: string
+          id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          coach_mode?: string | null
+          content: string
+          created_at?: string
+          id?: string
+          role: string
+          user_id: string
+        }
+        Update: {
+          coach_mode?: string | null
+          content?: string
+          created_at?: string
+          id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       curriculum_progress: {
         Row: {
           id: string
@@ -83,7 +185,10 @@ export type Database = {
           created_at: string
           deep_work_blocks: number
           dsa_problems: number
+          energy: number
+          evening_reflection: Json | null
           fasting: boolean
+          focus: number
           hanuman_chalisa_count: number
           hanuman_chalisa_done: boolean
           id: string
@@ -96,6 +201,11 @@ export type Database = {
           naam_jap_done: boolean
           notes: string | null
           phone_pickups: number
+          pillar_communication: boolean
+          pillar_ethics: boolean
+          pillar_influence: boolean
+          pillar_power: boolean
+          pillar_wealth: boolean
           pullups: number
           pushups: number
           random_speaking: number
@@ -104,6 +214,7 @@ export type Database = {
           squats: number
           temple_visit: boolean
           updated_at: string
+          urges: number
           user_id: string
           videos_today: number
           youtube_minutes: number
@@ -113,7 +224,10 @@ export type Database = {
           created_at?: string
           deep_work_blocks?: number
           dsa_problems?: number
+          energy?: number
+          evening_reflection?: Json | null
           fasting?: boolean
+          focus?: number
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
@@ -126,6 +240,11 @@ export type Database = {
           naam_jap_done?: boolean
           notes?: string | null
           phone_pickups?: number
+          pillar_communication?: boolean
+          pillar_ethics?: boolean
+          pillar_influence?: boolean
+          pillar_power?: boolean
+          pillar_wealth?: boolean
           pullups?: number
           pushups?: number
           random_speaking?: number
@@ -134,6 +253,7 @@ export type Database = {
           squats?: number
           temple_visit?: boolean
           updated_at?: string
+          urges?: number
           user_id: string
           videos_today?: number
           youtube_minutes?: number
@@ -143,7 +263,10 @@ export type Database = {
           created_at?: string
           deep_work_blocks?: number
           dsa_problems?: number
+          energy?: number
+          evening_reflection?: Json | null
           fasting?: boolean
+          focus?: number
           hanuman_chalisa_count?: number
           hanuman_chalisa_done?: boolean
           id?: string
@@ -156,6 +279,11 @@ export type Database = {
           naam_jap_done?: boolean
           notes?: string | null
           phone_pickups?: number
+          pillar_communication?: boolean
+          pillar_ethics?: boolean
+          pillar_influence?: boolean
+          pillar_power?: boolean
+          pillar_wealth?: boolean
           pullups?: number
           pushups?: number
           random_speaking?: number
@@ -164,6 +292,7 @@ export type Database = {
           squats?: number
           temple_visit?: boolean
           updated_at?: string
+          urges?: number
           user_id?: string
           videos_today?: number
           youtube_minutes?: number

@@ -16,6 +16,9 @@ import { CalendarNav } from "@/components/CalendarNav";
 import { DailyChallengeCard } from "@/components/DailyChallengeCard";
 import { TodayScoreBar } from "@/components/TodayScoreBar";
 import { PersonalMotivation } from "@/components/PersonalMotivation";
+import { BrahmacharyaTile } from "@/components/BrahmacharyaTile";
+import { SixPillarsGrid } from "@/components/SixPillarsGrid";
+import { HanumanCoachChat } from "@/components/HanumanCoachChat";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
@@ -130,6 +133,11 @@ const Index = () => {
           <MotivationHero videosToday={log.videos_today} target={2} dateISO={today} />
         </div>
 
+        {/* Brahmacharya tile — the new heart */}
+        <div className="mb-6">
+          <BrahmacharyaTile />
+        </div>
+
         {/* Today's score — prominent */}
         <div className="mb-6">
           <TodayScoreBar log={log} streak={stats.streak} />
@@ -138,6 +146,11 @@ const Index = () => {
         {/* Personal harsh-truth + motivation (changes daily, by name) */}
         <div className="mb-6">
           <PersonalMotivation />
+        </div>
+
+        {/* 5-Pillar Top 1% Operating System */}
+        <div className="mb-6">
+          <SixPillarsGrid log={log} onChange={setLog} />
         </div>
 
         {/* Power trio: AI Coach + Daily Challenges + 1-Min Speaking */}
@@ -248,6 +261,9 @@ const Index = () => {
           </p>
         </footer>
       </div>
+
+      {/* Floating Hanuman Coach */}
+      <HanumanCoachChat context={{ log, streak: stats.streak, date: dateISO }} />
     </div>
   );
 };
