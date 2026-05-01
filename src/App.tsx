@@ -10,6 +10,7 @@ import Auth from "./pages/Auth.tsx";
 import DayHistory from "./pages/DayHistory.tsx";
 import HistoryList from "./pages/HistoryList.tsx";
 import WeeklyProgress from "./pages/WeeklyProgress.tsx";
+import Academy from "./pages/Academy.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/day/:date" element={<ProtectedRoute><DayHistory /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><HistoryList /></ProtectedRoute>} />
             <Route path="/weekly" element={<ProtectedRoute><WeeklyProgress /></ProtectedRoute>} />
+            <Route path="/academy" element={<ProtectedRoute><Academy /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>

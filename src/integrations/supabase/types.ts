@@ -344,6 +344,33 @@ export type Database = {
         }
         Relationships: []
       }
+      saved_academy_items: {
+        Row: {
+          content: Json
+          created_at: string
+          id: string
+          section: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          content: Json
+          created_at?: string
+          id?: string
+          section: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          content?: Json
+          created_at?: string
+          id?: string
+          section?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
