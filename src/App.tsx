@@ -10,6 +10,7 @@ import Auth from "./pages/Auth.tsx";
 import DayHistory from "./pages/DayHistory.tsx";
 import HistoryList from "./pages/HistoryList.tsx";
 import WeeklyProgress from "./pages/WeeklyProgress.tsx";
+import Academy from "./pages/Academy.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
