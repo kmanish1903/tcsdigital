@@ -28,6 +28,7 @@ const App = () => (
             <Route path="/day/:date" element={<ProtectedRoute><DayHistory /></ProtectedRoute>} />
             <Route path="/history" element={<ProtectedRoute><HistoryList /></ProtectedRoute>} />
             <Route path="/weekly" element={<ProtectedRoute><WeeklyProgress /></ProtectedRoute>} />
+            <Route path="/academy" element={<ProtectedRoute><Academy /></ProtectedRoute>} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Routes>
