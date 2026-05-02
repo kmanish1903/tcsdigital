@@ -15,6 +15,7 @@ import { AiReflectionCoach } from "@/components/AiReflectionCoach";
 import { CalendarNav } from "@/components/CalendarNav";
 import { DailyChallengeCard } from "@/components/DailyChallengeCard";
 import { TodayScoreBar } from "@/components/TodayScoreBar";
+import { MorningNightChallenge } from "@/components/MorningNightChallenge";
 import { PersonalMotivation } from "@/components/PersonalMotivation";
 import { BrahmacharyaTile } from "@/components/BrahmacharyaTile";
 import { SixPillarsGrid } from "@/components/SixPillarsGrid";
@@ -142,6 +143,11 @@ const Index = () => {
         {/* Today's score — prominent */}
         <div className="mb-6">
           <TodayScoreBar log={log} streak={stats.streak} />
+        </div>
+
+        {/* Morning + Night ritual — first thing when laptop opens */}
+        <div className="mb-6">
+          <MorningNightChallenge />
         </div>
 
         {/* Personal harsh-truth + motivation (changes daily, by name) */}
