@@ -1,41 +1,51 @@
+## Make PrepTrack installable as a shortcut
 
-# Daily Growth Academy
+Goal: tap one icon on your phone home screen or laptop dock and land straight on today's challenges, streak, and score bar.
 
-A new dedicated page with AI-generated daily content across three domains, plus a save/bookmark system persisted in the database.
+### What gets added
 
-## What You Get
+1. **App icons** (already generated and ready):
+   - `public/icon-192.png` (192×192)
+   - `public/icon-512.png` (512×512)
+   - `public/apple-touch-icon.png` (180×180 for iOS)
+   Indigo "Pt" mark on a dark-indigo rounded square — matches the app theme.
 
-1. **New `/academy` page** with 3 tabs: Business Idea, Influence Training, Conversation & Attraction
-2. Each tab shows AI-generated daily content following the exact structure you described (1000-1500 word business ideas, influence scenarios, conversation scripts)
-3. **Save button** on each piece of content -- saved items go to a **Saved** tab on the same page
-4. Content regenerates daily (date-seeded) with a manual "Regenerate" option
-5. Nav link from the dashboard header
+2. **`public/manifest.json`** — declares PrepTrack as an installable app:
+   - `name`, `short_name: "PrepTrack"`
+   - `start_url: "/"`, `display: "standalone"` → opens without browser chrome
+   - `theme_color: #1a1530`, `background_color: #0b0a14`
+   - Both icons referenced as `any maskable`
 
-## Technical Plan
+3. **`index.html`** — add inside `<head>`:
+   - `<link rel="manifest" href="/manifest.json">`
+   - `<meta name="theme-color" content="#1a1530">`
+   - `<link rel="apple-touch-icon" href="/apple-touch-icon.png">`
+   - `<meta name="apple-mobile-web-app-capable" content="yes">`
+   - `<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">`
+   - `<meta name="apple-mobile-web-app-title" content="PrepTrack">`
 
-### 1. Database
+4. **`src/components/InstallPrompt.tsx`** — small dismissible bottom-left card that:
+   - Listens for `beforeinstallprompt` (Chrome/Edge desktop, Android Chrome) → shows an **"Install now"** button that triggers the native install dialog
+   - Detects iOS Safari → shows instructions: "Tap Share → Add to Home Screen"
+   - Auto-hides if app is already installed (`display-mode: standalone`)
+   - Permanently dismissable (stored in `localStorage` under `preptrack_install_dismissed`)
 
-- New `saved_academy_items` table: `id`, `user_id`, `section` (business/influence/conversation), `content` (jsonb), `title`, `created_at`
-- RLS: users manage only their own rows
+5. **`src/pages/Index.tsx`** — mount `<InstallPrompt />` at the bottom of the dashboard (alongside the Hanuman Coach floater).
 
-### 2. Edge Function: `academy-content`
+### What is intentionally NOT added
 
-- Uses `google/gemini-2.5-flash` via Lovable AI Gateway
-- Accepts `{ section: "business" | "influence" | "conversation" }` 
-- Each section has a tailored system prompt matching your exact structure requirements
-- Returns structured content (parsed via tool-calling for consistent JSON)
-- Handles 429/402 errors
+- **No service worker, no `vite-plugin-pwa`, no offline cache.** Per Lovable's PWA guidance, service workers cause stale-content bugs in the editor preview and aren't needed just for installability. PrepTrack needs fresh Supabase data on every open anyway.
 
-### 3. Frontend Components
+### How you actually install it
 
-- **`src/pages/Academy.tsx`** -- main page with 4 tabs: Business | Influence | Conversation | Saved
-- **`src/components/academy/BusinessIdeaCard.tsx`** -- renders the 13-point business idea structure
-- **`src/components/academy/InfluenceCard.tsx`** -- renders the 10-point influence scenario
-- **`src/components/academy/ConversationCard.tsx`** -- renders the conversation flow with dialogue format
-- **`src/components/academy/SavedItemsList.tsx`** -- lists all saved items with section filters
-- Each content card has a "Save Idea" / "Save Scenario" button that persists to the database
+The install only works on the **published URL** (`https://tcsdigital.lovable.app`), not the editor preview iframe.
 
-### 4. Routing & Navigation
+- **Android (Chrome)**: open the published URL → tap the "Install now" banner → icon appears on home screen.
+- **iPhone (Safari)**: open the published URL → tap Share → "Add to Home Screen" → icon appears on home screen.
+- **Laptop (Chrome / Edge / Brave)**: open the published URL → click the install icon in the address bar (or use the in-app banner) → app launches as standalone window, pinnable to taskbar/dock.
 
-- Add `/academy` route in `App.tsx` (protected)
-- Add "Academy" nav link in the dashboard header
+After install, tapping the icon opens straight to `/` — Brahmacharya streak, Morning + Night ritual, today's score, all visible immediately. No browser bar, no tabs.
+
+You'll need to **click "Update" in the Publish dialog** after I ship this so the new manifest goes live on `tcsdigital.lovable.app`.
+
+Approve and I'll write the 4 files and wire it in.

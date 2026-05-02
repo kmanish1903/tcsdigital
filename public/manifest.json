@@ -1,0 +1,25 @@
+{
+  "name": "PrepTrack — Top 1% Daily Tracker",
+  "short_name": "PrepTrack",
+  "description": "Daily tracker for Sadhana, Brahmacharya, DSA, Speaking & Top 1% pillars.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0a14",
+  "theme_color": "#1a1530",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

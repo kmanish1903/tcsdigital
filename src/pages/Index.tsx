@@ -20,6 +20,7 @@ import { PersonalMotivation } from "@/components/PersonalMotivation";
 import { BrahmacharyaTile } from "@/components/BrahmacharyaTile";
 import { SixPillarsGrid } from "@/components/SixPillarsGrid";
 import { HanumanCoachChat } from "@/components/HanumanCoachChat";
+import { InstallPrompt } from "@/components/InstallPrompt";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
@@ -271,6 +272,9 @@ const Index = () => {
 
       {/* Floating Hanuman Coach */}
       <HanumanCoachChat context={{ log, streak: stats.streak, date: dateISO }} />
+
+      {/* Install-as-app prompt (bottom-left, dismissable) */}
+      <InstallPrompt />
     </div>
   );
 };
