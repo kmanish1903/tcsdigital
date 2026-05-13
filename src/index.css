@@ -51,14 +51,15 @@
   }
 
   .dark {
-    --background: 230 25% 7%;
-    --foreground: 220 15% 96%;
+    /* Deep Midnight palette — #0B1020 base, #111827 secondary, #1A2238 cards */
+    --background: 226 47% 8%;
+    --foreground: 210 40% 98%;
 
-    --card: 230 22% 11%;
-    --card-foreground: 220 15% 96%;
+    --card: 222 38% 12%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 230 22% 11%;
-    --popover-foreground: 220 15% 96%;
+    --popover: 222 38% 14%;
+    --popover-foreground: 210 40% 98%;
 
     --primary: 243 80% 70%;
     --primary-foreground: 230 25% 7%;
