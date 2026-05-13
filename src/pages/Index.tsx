@@ -152,6 +152,11 @@ const Index = () => {
           <MorningNightChallenge />
         </div>
 
+        {/* Core Daily Focus — full-day time-blocked schedule */}
+        <div className="mb-6">
+          <CoreDailyFocus />
+        </div>
+
         {/* Personal harsh-truth + motivation (changes daily, by name) */}
         <div className="mb-6">
           <PersonalMotivation />
