@@ -21,6 +21,7 @@ import { BrahmacharyaTile } from "@/components/BrahmacharyaTile";
 import { SixPillarsGrid } from "@/components/SixPillarsGrid";
 import { HanumanCoachChat } from "@/components/HanumanCoachChat";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { CoreDailyFocus } from "@/components/CoreDailyFocus";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
