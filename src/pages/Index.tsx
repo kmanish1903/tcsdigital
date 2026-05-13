@@ -21,6 +21,7 @@ import { BrahmacharyaTile } from "@/components/BrahmacharyaTile";
 import { SixPillarsGrid } from "@/components/SixPillarsGrid";
 import { HanumanCoachChat } from "@/components/HanumanCoachChat";
 import { InstallPrompt } from "@/components/InstallPrompt";
+import { CoreDailyFocus } from "@/components/CoreDailyFocus";
 import { useAuth } from "@/hooks/useAuth";
 import { useAllDailyLogs, useCurriculumProgress, useDailyLog } from "@/hooks/useDailyLog";
 import { dateToISO, dayStatus, todayISO } from "@/lib/dailyLog";
@@ -149,6 +150,11 @@ const Index = () => {
         {/* Morning + Night ritual — first thing when laptop opens */}
         <div className="mb-6">
           <MorningNightChallenge />
+        </div>
+
+        {/* Core Daily Focus — full-day time-blocked schedule */}
+        <div className="mb-6">
+          <CoreDailyFocus />
         </div>
 
         {/* Personal harsh-truth + motivation (changes daily, by name) */}
