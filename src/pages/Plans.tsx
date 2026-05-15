@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Pin, PinOff, Trash2, Save, Calendar } from "lucide-react";
+import { ArrowLeft, Plus, Pin, PinOff, Trash2, Save, Calendar, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
