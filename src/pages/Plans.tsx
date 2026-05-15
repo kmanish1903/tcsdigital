@@ -282,7 +282,11 @@ export default function Plans() {
                         onChange={(e) => setEditing({ ...editing, content: e.target.value })}
                         className="min-h-[400px] font-mono text-sm"
                       />
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
+                        <Button onClick={handleRefineEditing} variant="secondary" disabled={refiningEdit} className="gap-1.5">
+                          {refiningEdit ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                          {refiningEdit ? "Refining…" : "Refine with AI"}
+                        </Button>
                         <Button onClick={handleUpdate} className="gap-1.5"><Save className="h-4 w-4" /> Save</Button>
                         <Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
                       </div>
