@@ -116,6 +116,7 @@ const Index = () => {
               <button onClick={() => navigate("/weekly")} className="text-muted-foreground transition hover:text-foreground">Weekly</button>
               <button onClick={() => navigate("/history")} className="text-muted-foreground transition hover:text-foreground">History</button>
               <button onClick={() => navigate("/academy")} className="text-muted-foreground transition hover:text-foreground">Academy</button>
+              <button onClick={() => navigate("/plans")} className="text-muted-foreground transition hover:text-foreground">Plans</button>
             </nav>
           </div>
           <div className="flex items-center gap-2">
