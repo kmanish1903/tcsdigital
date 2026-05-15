@@ -323,6 +323,42 @@ export type Database = {
         }
         Relationships: []
       }
+      plans: {
+        Row: {
+          content: string
+          created_at: string
+          horizon: string
+          id: string
+          pinned: boolean
+          start_date: string | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string
+          created_at?: string
+          horizon?: string
+          id?: string
+          pinned?: boolean
+          start_date?: string | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          horizon?: string
+          id?: string
+          pinned?: boolean
+          start_date?: string | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
