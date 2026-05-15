@@ -232,9 +232,16 @@ export default function Plans() {
                 onChange={(e) => setDraft({ ...draft, content: e.target.value })}
                 className="min-h-[300px] font-mono text-sm"
               />
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => handleRefineDraft(false)} variant="secondary" disabled={refining} className="gap-1.5">
+                  {refining ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  {refining ? "Refining…" : "Refine with AI"}
+                </Button>
+                <Button onClick={() => handleRefineDraft(true)} variant="outline" disabled={refining} className="gap-1.5">
+                  <Sparkles className="h-4 w-4" /> Refine & Save
+                </Button>
                 <Button onClick={handleCreate} className="gap-1.5">
-                  <Save className="h-4 w-4" /> Save Plan
+                  <Save className="h-4 w-4" /> Save As-Is
                 </Button>
                 <Button variant="ghost" onClick={() => setCreating(false)}>Cancel</Button>
               </div>
