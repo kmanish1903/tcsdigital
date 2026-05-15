@@ -43,6 +43,67 @@ export default function Plans() {
     start_date: new Date().toISOString().slice(0, 10),
     content: "",
   });
+  const [refining, setRefining] = useState(false);
+  const [refiningEdit, setRefiningEdit] = useState(false);
+  const [autoSaveAfterRefine, setAutoSaveAfterRefine] = useState(false);
+
+  const refine = async (
+    title: string,
+    horizon: Horizon,
+    content: string,
+  ): Promise<string | null> => {
+    if (!content.trim()) {
+      toast.error("Write something first");
+      return null;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+    const url = `https://${projectId}.supabase.co/functions/v1/refine-plan`;
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.access_token || ""}`,
+      },
+      body: JSON.stringify({ title, horizon, content }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) {
+      toast.error(json.error || "Refine failed");
+      return null;
+    }
+    return json.refined as string;
+  };
+
+  const handleRefineDraft = async (saveAfter = false) => {
+    setRefining(true);
+    const refined = await refine(draft.title, draft.horizon, draft.content);
+    setRefining(false);
+    if (refined) {
+      setDraft((d) => ({ ...d, content: refined }));
+      toast.success("Plan refined ✨");
+      if (saveAfter) setAutoSaveAfterRefine(true);
+    }
+  };
+
+  useEffect(() => {
+    if (autoSaveAfterRefine) {
+      setAutoSaveAfterRefine(false);
+      handleCreate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSaveAfterRefine]);
+
+  const handleRefineEditing = async () => {
+    if (!editing) return;
+    setRefiningEdit(true);
+    const refined = await refine(editing.title, editing.horizon, editing.content);
+    setRefiningEdit(false);
+    if (refined) {
+      setEditing({ ...editing, content: refined });
+      toast.success("Plan refined ✨");
+    }
+  };
 
   const load = async () => {
     if (!user) return;
