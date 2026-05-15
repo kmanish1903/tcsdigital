@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Plus, Pin, PinOff, Trash2, Save, Calendar } from "lucide-react";
+import { ArrowLeft, Plus, Pin, PinOff, Trash2, Save, Calendar, Sparkles, Loader2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -43,6 +43,67 @@ export default function Plans() {
     start_date: new Date().toISOString().slice(0, 10),
     content: "",
   });
+  const [refining, setRefining] = useState(false);
+  const [refiningEdit, setRefiningEdit] = useState(false);
+  const [autoSaveAfterRefine, setAutoSaveAfterRefine] = useState(false);
+
+  const refine = async (
+    title: string,
+    horizon: Horizon,
+    content: string,
+  ): Promise<string | null> => {
+    if (!content.trim()) {
+      toast.error("Write something first");
+      return null;
+    }
+    const { data: { session } } = await supabase.auth.getSession();
+    const projectId = import.meta.env.VITE_SUPABASE_PROJECT_ID;
+    const url = `https://${projectId}.supabase.co/functions/v1/refine-plan`;
+    const resp = await fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${session?.access_token || ""}`,
+      },
+      body: JSON.stringify({ title, horizon, content }),
+    });
+    const json = await resp.json();
+    if (!resp.ok) {
+      toast.error(json.error || "Refine failed");
+      return null;
+    }
+    return json.refined as string;
+  };
+
+  const handleRefineDraft = async (saveAfter = false) => {
+    setRefining(true);
+    const refined = await refine(draft.title, draft.horizon, draft.content);
+    setRefining(false);
+    if (refined) {
+      setDraft((d) => ({ ...d, content: refined }));
+      toast.success("Plan refined ✨");
+      if (saveAfter) setAutoSaveAfterRefine(true);
+    }
+  };
+
+  useEffect(() => {
+    if (autoSaveAfterRefine) {
+      setAutoSaveAfterRefine(false);
+      handleCreate();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoSaveAfterRefine]);
+
+  const handleRefineEditing = async () => {
+    if (!editing) return;
+    setRefiningEdit(true);
+    const refined = await refine(editing.title, editing.horizon, editing.content);
+    setRefiningEdit(false);
+    if (refined) {
+      setEditing({ ...editing, content: refined });
+      toast.success("Plan refined ✨");
+    }
+  };
 
   const load = async () => {
     if (!user) return;
@@ -171,9 +232,16 @@ export default function Plans() {
                 onChange={(e) => setDraft({ ...draft, content: e.target.value })}
                 className="min-h-[300px] font-mono text-sm"
               />
-              <div className="flex gap-2">
+              <div className="flex flex-wrap gap-2">
+                <Button onClick={() => handleRefineDraft(false)} variant="secondary" disabled={refining} className="gap-1.5">
+                  {refining ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                  {refining ? "Refining…" : "Refine with AI"}
+                </Button>
+                <Button onClick={() => handleRefineDraft(true)} variant="outline" disabled={refining} className="gap-1.5">
+                  <Sparkles className="h-4 w-4" /> Refine & Save
+                </Button>
                 <Button onClick={handleCreate} className="gap-1.5">
-                  <Save className="h-4 w-4" /> Save Plan
+                  <Save className="h-4 w-4" /> Save As-Is
                 </Button>
                 <Button variant="ghost" onClick={() => setCreating(false)}>Cancel</Button>
               </div>
@@ -214,7 +282,11 @@ export default function Plans() {
                         onChange={(e) => setEditing({ ...editing, content: e.target.value })}
                         className="min-h-[400px] font-mono text-sm"
                       />
-                      <div className="flex gap-2">
+                      <div className="flex flex-wrap gap-2">
+                        <Button onClick={handleRefineEditing} variant="secondary" disabled={refiningEdit} className="gap-1.5">
+                          {refiningEdit ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}
+                          {refiningEdit ? "Refining…" : "Refine with AI"}
+                        </Button>
                         <Button onClick={handleUpdate} className="gap-1.5"><Save className="h-4 w-4" /> Save</Button>
                         <Button variant="ghost" onClick={() => setEditing(null)}>Cancel</Button>
                       </div>
