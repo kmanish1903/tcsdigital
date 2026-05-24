@@ -35,6 +35,7 @@ export type DailyLogRow = {
   pillar_power: boolean;
   evening_reflection: { thanked?: string; regret?: string; tomorrow?: string } | null;
   notes: string | null;
+  custom_values: Record<string, boolean | number | string> | null;
 };
 
 export const NAAM_TARGET = 108;
@@ -75,6 +76,7 @@ export function emptyDailyLog(date: string): DailyLogRow {
     pillar_power: false,
     evening_reflection: null,
     notes: "",
+    custom_values: {},
   };
 }
 

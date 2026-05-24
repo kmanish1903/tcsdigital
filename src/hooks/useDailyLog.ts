@@ -110,6 +110,7 @@ export function useDailyLog(dateISO: string, onUpsert?: (row: DailyLogRow) => vo
         pillar_power: log.pillar_power ?? false,
         evening_reflection: log.evening_reflection ?? null,
         notes: log.notes,
+        custom_values: log.custom_values ?? {},
       };
       const { data, error } = await supabase
         .from("daily_logs")

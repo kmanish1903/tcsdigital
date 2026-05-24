@@ -1,7 +1,11 @@
 import { CHALISA_TARGET, DailyLogRow, NAAM_TARGET, dayStatus } from "@/lib/dailyLog";
 import { CheckBox } from "./CheckBox";
-import { AlertTriangle, Flame, XCircle } from "lucide-react";
+import { AlertTriangle, Flame, XCircle, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { CustomLogField, useCustomLogFields } from "@/hooks/useCustomLogFields";
+import { CustomizeLogModal } from "./CustomizeLogModal";
+import { useState } from "react";
 
 interface Props {
   log: DailyLogRow;
@@ -116,10 +120,27 @@ function ProgressInput({
 
 export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
   const update = <K extends keyof DailyLogRow>(k: K, v: DailyLogRow[K]) => onChange({ ...log, [k]: v });
+  const { grouped: customGrouped, fields: customFields } = useCustomLogFields();
+  const [customizeOpen, setCustomizeOpen] = useState(false);
+
+  const customVals = log.custom_values ?? {};
+  const updateCustomVal = (key: string, val: boolean | number | string) => {
+    onChange({ ...log, custom_values: { ...customVals, [key]: val } });
+  };
 
   const label =
     dateLabel ??
     new Date(log.log_date + "T00:00").toLocaleDateString(undefined, { month: "short", day: "numeric" });
+
+  const sectionEmojis: Record<string, string> = {
+    Learning: "📚",
+    Sadhana: "🕉",
+    Discipline: "🛕",
+    Speaking: "🎤",
+    Fitness: "💪",
+    Focus: "🚫",
+    Custom: "⭐",
+  };
 
   return (
     <div className="surface-card p-6 lg:p-7">
@@ -127,7 +148,14 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
         <h2 className="text-xl font-bold text-foreground">
           {readOnly ? "Day Log" : "Today's Log"} — {label}
         </h2>
-        <StatusPill log={log} />
+        <div className="flex items-center gap-2">
+          <StatusPill log={log} />
+          {!readOnly && (
+            <Button variant="ghost" size="sm" onClick={() => setCustomizeOpen(true)} className="gap-1.5 text-xs">
+              <Settings2 className="h-3.5 w-3.5" /> Customize
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* SADHANA — naam jap, chalisa, meditation */}
@@ -336,6 +364,74 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
         />
       </div>
 
+      {/* Custom fields — grouped by section */}
+      {customFields.length > 0 && Object.entries(customGrouped).map(([section, fields]) => (
+        <div key={section}>
+          <SectionTitle>{sectionEmojis[section] || "⭐"} {section}</SectionTitle>
+          <div className="divide-y divide-border/60">
+            {fields.map((f) => {
+              const val = customVals[f.field_key];
+              if (f.field_type === "checkbox") {
+                const checked = Boolean(val);
+                return (
+                  <Row
+                    key={f.field_key}
+                    label={f.label}
+                    priority={f.priority as keyof typeof PRIORITY ?? undefined}
+                    checked={checked}
+                    onCheck={(v) => updateCustomVal(f.field_key, v)}
+                    disabled={readOnly}
+                    right={<span className={checked ? "font-semibold text-success" : "text-muted-foreground"}>{checked ? "Done" : "—"}</span>}
+                  />
+                );
+              }
+              if (f.field_type === "number") {
+                const numVal = typeof val === "number" ? val : 0;
+                const hasTarget = f.target && f.target > 0;
+                return (
+                  <Row
+                    key={f.field_key}
+                    label={f.label}
+                    priority={f.priority as keyof typeof PRIORITY ?? undefined}
+                    checked={hasTarget ? numVal >= (f.target ?? 0) : numVal > 0}
+                    onCheck={(v) => updateCustomVal(f.field_key, v ? Math.max(1, numVal) : 0)}
+                    disabled={readOnly}
+                    right={
+                      hasTarget ? (
+                        <ProgressInput
+                          value={numVal}
+                          onChange={(n) => updateCustomVal(f.field_key, n)}
+                          target={f.target!}
+                          disabled={readOnly}
+                          suffix={f.unit ? `/ ${f.target} ${f.unit}` : `/ ${f.target}`}
+                        />
+                      ) : (
+                        <NumInput disabled={readOnly} value={numVal} onChange={(n) => updateCustomVal(f.field_key, n)} suffix={f.unit || undefined} />
+                      )
+                    }
+                  />
+                );
+              }
+              // text type
+              const textVal = typeof val === "string" ? val : "";
+              return (
+                <div key={f.field_key} className="flex items-center justify-between gap-4 py-2.5">
+                  <span className="font-medium text-foreground">{f.label}</span>
+                  <input
+                    type="text"
+                    disabled={readOnly}
+                    value={textVal}
+                    onChange={(e) => updateCustomVal(f.field_key, e.target.value)}
+                    placeholder={`Enter ${f.label.toLowerCase()}…`}
+                    className="h-8 w-48 rounded-md border border-input bg-background px-2 text-sm focus:border-primary focus:outline-none disabled:opacity-60"
+                  />
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+
       <textarea
         placeholder="What I learned today (React notes, insights)..."
         value={log.notes || ""}
@@ -344,6 +440,8 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
         rows={2}
         className="mt-5 w-full resize-none rounded-lg border border-input bg-background/60 p-3 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none disabled:opacity-70"
       />
+
+      <CustomizeLogModal open={customizeOpen} onClose={() => setCustomizeOpen(false)} />
     </div>
   );
 }
