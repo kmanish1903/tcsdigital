@@ -1,6 +1,6 @@
 import { CHALISA_TARGET, DailyLogRow, NAAM_TARGET, dayStatus } from "@/lib/dailyLog";
 import { CheckBox } from "./CheckBox";
-import { AlertTriangle, Flame, XCircle, Settings2 } from "lucide-react";
+import { TriangleAlert as AlertTriangle, Flame, Circle as XCircle, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { CustomLogField, useCustomLogFields } from "@/hooks/useCustomLogFields";
