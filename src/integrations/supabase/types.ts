@@ -179,10 +179,56 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_log_fields: {
+        Row: {
+          created_at: string
+          field_key: string
+          field_type: string
+          id: string
+          label: string
+          priority: string | null
+          section: string
+          sort_order: number
+          target: number | null
+          unit: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          field_key: string
+          field_type?: string
+          id?: string
+          label: string
+          priority?: string | null
+          section?: string
+          sort_order?: number
+          target?: number | null
+          unit?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          field_key?: string
+          field_type?: string
+          id?: string
+          label?: string
+          priority?: string | null
+          section?: string
+          sort_order?: number
+          target?: number | null
+          unit?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       daily_logs: {
         Row: {
           anulom_vilom: boolean
           created_at: string
+          custom_values: Json
           deep_work_blocks: number
           dsa_problems: number
           energy: number
@@ -222,6 +268,7 @@ export type Database = {
         Insert: {
           anulom_vilom?: boolean
           created_at?: string
+          custom_values?: Json
           deep_work_blocks?: number
           dsa_problems?: number
           energy?: number
@@ -261,6 +308,7 @@ export type Database = {
         Update: {
           anulom_vilom?: boolean
           created_at?: string
+          custom_values?: Json
           deep_work_blocks?: number
           dsa_problems?: number
           energy?: number
