@@ -155,51 +155,6 @@ export type Database = {
         }
         Relationships: []
       }
-      custom_log_fields: {
-        Row: {
-          id: string
-          user_id: string
-          field_key: string
-          label: string
-          field_type: string
-          unit: string | null
-          target: number | null
-          priority: string | null
-          sort_order: number
-          section: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id?: string
-          user_id: string
-          field_key: string
-          label: string
-          field_type?: string
-          unit?: string | null
-          target?: number | null
-          priority?: string | null
-          sort_order?: number
-          section?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          user_id?: string
-          field_key?: string
-          label?: string
-          field_type?: string
-          unit?: string | null
-          target?: number | null
-          priority?: string | null
-          sort_order?: number
-          section?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Relationships: []
-      }
       curriculum_progress: {
         Row: {
           id: string
@@ -263,7 +218,6 @@ export type Database = {
           user_id: string
           videos_today: number
           youtube_minutes: number
-          custom_values: Json | null
         }
         Insert: {
           anulom_vilom?: boolean
@@ -303,7 +257,6 @@ export type Database = {
           user_id: string
           videos_today?: number
           youtube_minutes?: number
-          custom_values?: Json | null
         }
         Update: {
           anulom_vilom?: boolean
@@ -343,7 +296,6 @@ export type Database = {
           user_id?: string
           videos_today?: number
           youtube_minutes?: number
-          custom_values?: Json | null
         }
         Relationships: []
       }
