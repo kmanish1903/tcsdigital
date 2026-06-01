@@ -24,7 +24,7 @@ const FIELD_TYPES: { value: CustomLogField["field_type"]; label: string }[] = [
   { value: "text", label: "Text (notes/short text)" },
 ];
 const PRIORITIES: { value: string; label: string }[] = [
-  { value: "", label: "None" },
+  { value: "none", label: "None" },
   { value: "HIGH", label: "HIGH" },
   { value: "SADHANA", label: "SADHANA" },
 ];
@@ -49,7 +49,7 @@ export function CustomizeLogModal({ open, onClose }: Props) {
     field_type: "checkbox",
     unit: "",
     target: "",
-    priority: "",
+    priority: "none",
     section: "Custom",
   });
 
@@ -65,13 +65,13 @@ export function CustomizeLogModal({ open, onClose }: Props) {
       field_type: draft.field_type,
       unit: draft.unit.trim() || null,
       target: draft.target ? parseInt(draft.target) : null,
-      priority: (draft.priority as "HIGH" | "SADHANA") || null,
+      priority: draft.priority === "HIGH" || draft.priority === "SADHANA" ? draft.priority : null,
       sort_order: fields.length,
       section: draft.section,
     });
     setSaving(false);
     setAdding(false);
-    setDraft({ label: "", field_key: "", field_type: "checkbox", unit: "", target: "", priority: "", section: "Custom" });
+    setDraft({ label: "", field_key: "", field_type: "checkbox", unit: "", target: "", priority: "none", section: "Custom" });
     toast.success("Field added");
   };
 
