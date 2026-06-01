@@ -65,7 +65,7 @@ export function CustomizeLogModal({ open, onClose }: Props) {
       field_type: draft.field_type,
       unit: draft.unit.trim() || null,
       target: draft.target ? parseInt(draft.target) : null,
-      priority: (draft.priority as "HIGH" | "SADHANA") || null,
+      priority: draft.priority === "HIGH" || draft.priority === "SADHANA" ? draft.priority : null,
       sort_order: fields.length,
       section: draft.section,
     });
