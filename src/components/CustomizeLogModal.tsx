@@ -24,7 +24,7 @@ const FIELD_TYPES: { value: CustomLogField["field_type"]; label: string }[] = [
   { value: "text", label: "Text (notes/short text)" },
 ];
 const PRIORITIES: { value: string; label: string }[] = [
-  { value: "", label: "None" },
+  { value: "none", label: "None" },
   { value: "HIGH", label: "HIGH" },
   { value: "SADHANA", label: "SADHANA" },
 ];
