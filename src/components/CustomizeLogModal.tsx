@@ -71,7 +71,7 @@ export function CustomizeLogModal({ open, onClose }: Props) {
     });
     setSaving(false);
     setAdding(false);
-    setDraft({ label: "", field_key: "", field_type: "checkbox", unit: "", target: "", priority: "", section: "Custom" });
+    setDraft({ label: "", field_key: "", field_type: "checkbox", unit: "", target: "", priority: "none", section: "Custom" });
     toast.success("Field added");
   };
 
