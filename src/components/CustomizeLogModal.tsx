@@ -49,7 +49,7 @@ export function CustomizeLogModal({ open, onClose }: Props) {
     field_type: "checkbox",
     unit: "",
     target: "",
-    priority: "",
+    priority: "none",
     section: "Custom",
   });
 
