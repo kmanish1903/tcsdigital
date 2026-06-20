@@ -278,22 +278,43 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
       </div>
 
       {/* SPEAKING */}
-      <SectionTitle>🎤 Speaking</SectionTitle>
+      <SectionTitle>🎤 Speaking & Communication</SectionTitle>
       <div className="divide-y divide-border/60">
+        <Row
+          label="Tongue Twisters"
+          checked={Boolean(customVals.tongue_twisters)}
+          onCheck={(v) => updateCustomVal("tongue_twisters", v)}
+          disabled={readOnly}
+          right={<span className={customVals.tongue_twisters ? "font-semibold text-success" : "text-muted-foreground"}>{customVals.tongue_twisters ? "Done" : "10–15 min"}</span>}
+        />
+        <Row
+          label="Read-Aloud Conversation Practice"
+          checked={Boolean(customVals.read_aloud)}
+          onCheck={(v) => updateCustomVal("read_aloud", v)}
+          disabled={readOnly}
+          right={<span className={customVals.read_aloud ? "font-semibold text-success" : "text-muted-foreground"}>{customVals.read_aloud ? "Done" : "15 min"}</span>}
+        />
+        <Row
+          label="Daily Reading"
+          checked={Boolean(customVals.daily_reading)}
+          onCheck={(v) => updateCustomVal("daily_reading", v)}
+          disabled={readOnly}
+          right={<span className={customVals.daily_reading ? "font-semibold text-success" : "text-muted-foreground"}>{customVals.daily_reading ? "Done" : "2 pages"}</span>}
+        />
         <Row
           label="Mirror Speaking"
           priority="HIGH"
           checked={log.mirror_speaking}
           onCheck={(v) => update("mirror_speaking", v)}
           disabled={readOnly}
-          right={<span className={log.mirror_speaking ? "font-semibold text-success" : "text-muted-foreground"}>{log.mirror_speaking ? "Done" : "Pending"}</span>}
+          right={<span className={log.mirror_speaking ? "font-semibold text-success" : "text-muted-foreground"}>{log.mirror_speaking ? "Done" : "4 topics"}</span>}
         />
         <Row
           label="JAM Speaking"
           checked={log.jam_speaking}
           onCheck={(v) => update("jam_speaking", v)}
           disabled={readOnly}
-          right={<span className={log.jam_speaking ? "font-semibold text-success" : "text-warning"}>{log.jam_speaking ? "Done" : "Pending"}</span>}
+          right={<span className={log.jam_speaking ? "font-semibold text-success" : "text-warning"}>{log.jam_speaking ? "Done" : "1 topic"}</span>}
         />
         <Row
           label="1-Minute Random Topics"
@@ -301,6 +322,13 @@ export function DailyLogCard({ log, onChange, readOnly, dateLabel }: Props) {
           onCheck={(v) => update("random_speaking", v ? Math.max(1, log.random_speaking) : 0)}
           disabled={readOnly}
           right={<NumInput disabled={readOnly} value={log.random_speaking} onChange={(n) => update("random_speaking", n)} suffix="topics" />}
+        />
+        <Row
+          label="Typing Practice"
+          checked={Boolean(customVals.typing_practice)}
+          onCheck={(v) => updateCustomVal("typing_practice", v)}
+          disabled={readOnly}
+          right={<span className={customVals.typing_practice ? "font-semibold text-success" : "text-muted-foreground"}>{customVals.typing_practice ? "Done" : "15 min"}</span>}
         />
       </div>
 
